@@ -21,7 +21,7 @@ const app = {
         .catch((err) => {
           // console.log(err)
           alert(err.response.data.message)
-          window.location = 'login.html';
+          window.location = 'index.html';
         })
     },
     // 取得產品資料
