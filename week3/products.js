@@ -49,10 +49,11 @@ createApp({
         productModal.show();
       }else if(type === 'edit'){
         this.isNew = false;
-        if(item.imagesUrl){
-          this.tempProduct = {...item};
-        }else{
-          this.tempProduct = {...item, imagesUrl: []}
+        const tempProduct = {...item}
+        if (tempProduct.imagesUrl) {
+          this.tempProduct = { ...item };
+        } else {
+          this.tempProduct = { ...item, imagesUrl: [] };
         }
         productModal.show();
       }else if(type === 'delete'){
