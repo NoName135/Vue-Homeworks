@@ -69,7 +69,8 @@
           <div class="modal-content border-0">
             <div class="modal-header bg-dark text-white">
               <h5 id="productModalLabel" class="modal-title">
-                <span>新增產品</span>
+                <span v-if="isNew">新增產品</span>
+                <span v-else>編輯產品</span>
               </h5>
               <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -176,7 +177,7 @@
             </div>
             <div class="modal-body">
               是否刪除
-              <strong class="text-danger"></strong> 商品(刪除後將無法恢復)。
+              <strong class="text-danger"></strong> {{tempProduct.title}} (刪除後無法恢復)。
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">

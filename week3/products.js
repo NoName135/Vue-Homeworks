@@ -49,7 +49,11 @@ createApp({
         productModal.show();
       }else if(type === 'edit'){
         this.isNew = false;
-        this.tempProduct = {...item}
+        if(item.imagesUrl){
+          this.tempProduct = {...item};
+        }else{
+          this.tempProduct = {...item, imagesUrl: []}
+        }
         productModal.show();
       }else if(type === 'delete'){
         this.tempProduct = {...item}
