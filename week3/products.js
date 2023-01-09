@@ -107,7 +107,9 @@ createApp({
   },
   computed: {
     sortProductsPrice() {
-      if(this.sortBy){
+      if(this.sortBy === 'category'){
+        return [...this.products].sort((a, b) => {return this.ascending ? a.category.localeCompare(b.category, 'zh-hant') : b.category.localeCompare(a.category, 'zh-hant')})
+      }else if(this.sortBy){
         return [...this.products].sort((a, b) => { return this.ascending ? a[this.sortBy] - b[this.sortBy] : b[this.sortBy] - a[this.sortBy] });
       }else{
         return this.products;
