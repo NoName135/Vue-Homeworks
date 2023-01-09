@@ -11,6 +11,8 @@ createApp({
       products: [],
       tempProduct: {},
       isNew: false,
+      ascending: false,
+      sortBy: ''
     };
   },
   methods: {
@@ -44,7 +46,8 @@ createApp({
       if(type === 'new'){
         this.isNew = true;
         this.tempProduct = {
-          imagesUrl: []
+          imagesUrl: [],
+          is_enabled: 0
         };
         productModal.show();
       }else if(type === 'edit'){
@@ -100,6 +103,15 @@ createApp({
           // console.log(err);
           alert(err.response.data.message);
         });
+    }
+  },
+  computed: {
+    sortProductsPrice() {
+      if(this.sortBy){
+        return [...this.products].sort((a, b) => { return this.ascending ? a[this.sortBy] - b[this.sortBy] : b[this.sortBy] - a[this.sortBy] });
+      }else{
+        return this.products;
+      }
     }
   },
   mounted() {
