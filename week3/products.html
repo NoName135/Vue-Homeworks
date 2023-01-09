@@ -21,38 +21,34 @@
         <table class="table mt-4">
           <thead>
             <tr>
-              <th width="120">
-                <p class="m-0" style="cursor: pointer" @click="ascending = sortBy === 'category' ? !ascending : true; sortBy = 'category';">分類
-                  <template v-if="sortBy === 'category'">
-                    <span v-if="ascending">▲</span>
-                    <span v-else>▼</span>
-                  </template>
-                </p>
+              <th width="120" style="cursor: pointer" @click="ascending = sortBy === 'category' ? !ascending : true; sortBy = 'category';">
+                分類
+                <template v-if="sortBy === 'category'">
+                  <span v-if="ascending">▲</span>
+                  <span v-else>▼</span>
+                </template>
               </th>
               <th>產品名稱</th>
-              <th width="120">
-                <p class="m-0" style="cursor: pointer" @click="ascending = sortBy === 'origin_price' ? !ascending : true; sortBy = 'origin_price';">原價
-                  <template v-if="sortBy === 'origin_price'">
-                    <span v-if="ascending">▲</span>
-                    <span v-else>▼</span>
-                  </template>
-                </p>
+              <th width="120" style="cursor: pointer" @click="ascending = sortBy === 'origin_price' ? !ascending : true; sortBy = 'origin_price';">
+                原價
+                <template v-if="sortBy === 'origin_price'">
+                  <span v-if="ascending">▲</span>
+                  <span v-else>▼</span>
+                </template>
               </th>
-              <th width="120">
-                <p class="m-0" style="cursor: pointer" @click="ascending = sortBy === 'price' ? !ascending : true; sortBy = 'price';">售價
-                  <template v-if="sortBy === 'price'">
-                    <span v-if="ascending">▲</span>
-                    <span v-else>▼</span>
-                  </template>
-                </p>
+              <th width="120" style="cursor: pointer" @click="ascending = sortBy === 'price' ? !ascending : true; sortBy = 'price';">
+                售價
+                <template v-if="sortBy === 'price'">
+                  <span v-if="ascending">▲</span>
+                  <span v-else>▼</span>
+                </template>
               </th>
-              <th width="100">
-                <p class="m-0" style="cursor: pointer" @click="ascending = sortBy === 'is_enabled' ? !ascending : true; sortBy = 'is_enabled';">是否啟用
-                  <template v-if="sortBy === 'is_enabled'">
-                    <span v-if="ascending">▲</span>
-                    <span v-else>▼</span>
-                  </template>
-                </p>
+              <th width="100" style="cursor: pointer" @click="ascending = sortBy === 'is_enabled' ? !ascending : true; sortBy = 'is_enabled';">
+                是否啟用
+                <template v-if="sortBy === 'is_enabled'">
+                  <span v-if="ascending">▲</span>
+                  <span v-else>▼</span>
+                </template>
               </th>
               <th width="120">
                 編輯
