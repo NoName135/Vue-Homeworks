@@ -38,7 +38,7 @@ createApp({
           this.products = res.data.products;
         })
         .catch(err => {
-          console.log(err);
+          // console.log(err);
           alert(err.response.data.message);
         })
     },
