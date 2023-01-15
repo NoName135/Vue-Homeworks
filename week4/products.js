@@ -120,7 +120,7 @@ const upload = {
       apiPath: 'weekhomeworks',
     };
   },
-  props: ['url', 'path', 'index'],
+  props: ['index'],
   template: `
     <slot name="main">
       <input type="file" class="form-control" @change="(e) => handleFile(e,'imageUrl')" />
