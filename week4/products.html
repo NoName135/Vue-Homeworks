@@ -129,7 +129,7 @@
                       <label for="imageUrl" class="form-label">主要圖片 (請輸入網址或上傳圖片)</label>
                       <input id="imageUrl" v-model.lazy="product.imageUrl" type="text" class="form-control mb-2" placeholder="請輸入圖片連結">
                       <upload @change-img="changeImage">
-                        <template #multi><div></div></template>
+                        <template #multi><span /></template>
                       </upload>
                     </div>
                     <img class="img-fluid" :src="product.imageUrl">
@@ -141,7 +141,7 @@
                       <input :id="'imagesUrl'+i" v-model.lazy="product.imagesUrl[i]" type="text" class="form-control"
                         placeholder="請輸入圖片連結">
                       <upload :index="i" @change-img="changeImage">
-                        <template #main><div></div></template>
+                        <template #main><span /></template>
                       </upload>
                     </div>
                     <img class="img-fluid" :src="image">
