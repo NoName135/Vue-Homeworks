@@ -126,7 +126,7 @@
                 <div class="col-sm-4">
                   <div class="mb-2">
                     <div class="mb-3">
-                      <label for="imageUrl" class="form-label">主要圖片</label>
+                      <label for="imageUrl" class="form-label">主要圖片 (請輸入網址或上傳圖片)</label>
                       <input id="imageUrl" v-model.lazy="product.imageUrl" type="text" class="form-control mb-2" placeholder="請輸入圖片連結">
                       <upload @change-img="changeImage">
                         <template #multi><div></div></template>
@@ -137,7 +137,7 @@
                   <h3 class="mb-3">多圖新增</h3>
                   <div class="mb-1" v-for="(image, i) in product.imagesUrl" :key="i">
                     <div class="mb-3">
-                      <label :for="'imagesUrl'+i" class="form-label">圖片網址</label>
+                      <label :for="'imagesUrl'+i" class="form-label">圖片網址 (請輸入網址或上傳圖片)</label>
                       <input :id="'imagesUrl'+i" v-model.lazy="product.imagesUrl[i]" type="text" class="form-control"
                         placeholder="請輸入圖片連結">
                       <upload :index="i" @change-img="changeImage">
