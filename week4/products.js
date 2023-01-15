@@ -142,7 +142,6 @@ const upload = {
           .post(`${this.apiUrl}/api/${this.apiPath}/admin/upload`, formData)
           .then((res) => {
             // console.log(res.data);
-            // 判斷上傳到主要圖片或多圖區塊
             const imgUrl = res.data.imageUrl;
             this.$emit('changeImg', index, target, imgUrl);
           })
@@ -200,6 +199,7 @@ app.component('updateProductModal', {
     },
     // 變更 product 圖片
     changeImage(index, target, imgUrl){
+      // 判斷上傳到主要圖片或多圖區塊
       if (index === undefined) {
         this.product[target] = imgUrl;
       } else {
