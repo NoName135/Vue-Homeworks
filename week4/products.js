@@ -1,4 +1,5 @@
 import { createApp } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+import pagination from './pagination.js';
 
 let productModal;
 let delProductModal;
@@ -98,17 +99,9 @@ const app = createApp({
     axios.defaults.headers.common.Authorization = token;
 
     this.userCheck();
-  }
-})
-
-// 頁碼元件
-app.component('pagination', {
-  props: {pageObj: Object},
-  template: '#pagination',
-  methods: {
-    changePage(page){
-      this.$emit('emitPage', page)
-    }
+  },
+  components: {
+    pagination
   }
 })
 
@@ -173,16 +166,14 @@ app.component('updateProductModal', {
   methods: {
     // 更新產品資料
     updateProduct(page) {
-      let httpVerb;
-      let url;
+      let httpVerb = 'post';
+      let url = `${this.url}/api/${this.path}/admin/product`;
 
-      if (this.isNew) {
-        httpVerb = 'post';
-        url = `${this.url}/api/${this.path}/admin/product`;
-      } else {
+      if (!this.isNew) {
         httpVerb = 'put';
         url = `${this.url}/api/${this.path}/admin/product/${this.product.id}`;
       }
+
       axios[httpVerb](url, {
         data: this.product,
       })
