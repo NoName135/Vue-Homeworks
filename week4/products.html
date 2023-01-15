@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week4</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <div id="app">
+      <div class="container">
+        <div class="text-end mt-4">
+          <button class="btn btn-primary" @click="openModal('new')">
+            建立新的產品
+          </button>
+        </div>
+        <table class="table mt-4">
+          <thead>
+            <tr>
+              <th width="120" style="cursor: pointer" @click="ascending = sortBy === 'category' ? !ascending : true; sortBy = 'category';">
+                分類
+                <template v-if="sortBy === 'category'">
+                  <span v-if="ascending">▲</span>
+                  <span v-else>▼</span>
+                </template>
+              </th>
+              <th>產品名稱</th>
+              <th width="120" style="cursor: pointer" @click="ascending = sortBy === 'origin_price' ? !ascending : true; sortBy = 'origin_price';">
+                原價
+                <template v-if="sortBy === 'origin_price'">
+                  <span v-if="ascending">▲</span>
+                  <span v-else>▼</span>
+                </template>
+              </th>
+              <th width="120" style="cursor: pointer" @click="ascending = sortBy === 'price' ? !ascending : true; sortBy = 'price';">
+                售價
+                <template v-if="sortBy === 'price'">
+                  <span v-if="ascending">▲</span>
+                  <span v-else>▼</span>
+                </template>
+              </th>
+              <th width="100" style="cursor: pointer" @click="ascending = sortBy === 'is_enabled' ? !ascending : true; sortBy = 'is_enabled';">
+                是否啟用
+                <template v-if="sortBy === 'is_enabled'">
+                  <span v-if="ascending">▲</span>
+                  <span v-else>▼</span>
+                </template>
+              </th>
+              <th width="120">
+                編輯
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="product in sortProductsPrice" :key="product.id">
+              <td>{{product.category}}</td>
+              <td>{{product.title}}</td>
+              <td class="text-end">{{product.origin_price}}</td>
+              <td class="text-end">{{product.price}}</td>
+              <td>
+                <span class="text-success" v-if="product.is_enabled">啟用</span>
+                <span v-else>未啟用</span>
+              </td>
+              <td>
+                <div class="btn-group">
+                  <button type="button" class="btn btn-outline-primary btn-sm" @click="openModal('edit', product)">
+                    編輯
+                  </button>
+                  <button type="button" class="btn btn-outline-danger btn-sm" @click="openModal('delete', product)">
+                    刪除
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- pages -->
+        <pagination :page-obj="pagination" @emit-page="getProducts"></pagination>
+      </div>
+      <!-- Modal -->
+      <update-product-modal :url="apiUrl" :path="apiPath" :is-new="isNew" :product="tempProduct" :page="pagination.current_page" @update="getProducts"></update-product-modal>
+      <delete-product-modal :url="apiUrl" :path="apiPath" :product="tempProduct" :page="pagination.current_page" @update="getProducts"></delete-product-modal>
+      <!-- Modal -->
+    </div>
+
+    <!-- 頁碼 template -->
+    <script type="text/x-template" id="pagination">
+      <nav aria-label="Page">
+        <ul class="pagination">
+          <li :class="['page-item', {disabled: pageObj.current_page === 1}]">
+            <a class="page-link" href="#" aria-label="Previous" @click.prevent="changePage(pageObj.current_page-1)">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item" v-for="page in pageObj.total_pages" :key="page">
+            <span :class="['page-link', {'active': page === pageObj.current_page}]" v-if="page === pageObj.current_page">{{page}}</span>
+            <a href="#" class='page-link' @click.prevent="changePage(page)" v-else>{{page}}</a>
+          </li>
+          <li :class="['page-item', {disabled: pageObj.current_page === pageObj.total_pages}]">
+            <a class="page-link" href="#" aria-label="Next" @click.prevent="changePage(pageObj.current_page+1)">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </script>
+
+    <!-- 新增、編輯產品 template -->
+    <script type="text/x-template" id="updateProductModal">
+      <div id="productModal" ref="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content border-0">
+            <div class="modal-header bg-dark text-white">
+              <h5 id="productModalLabel" class="modal-title">
+                <span v-if="isNew">新增產品</span>
+                <span v-else>編輯產品</span>
+              </h5>
+              <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="mb-2">
+                    <div class="mb-3">
+                      <label for="imageUrl" class="form-label">主要圖片</label>
+                      <input id="imageUrl" v-model.lazy="product.imageUrl" type="text" class="form-control mb-2" placeholder="請輸入圖片連結">
+                      <upload @change-img="changeImage">
+                        <template #multi><div></div></template>
+                      </upload>
+                    </div>
+                    <img class="img-fluid" :src="product.imageUrl">
+                  </div>
+                  <h3 class="mb-3">多圖新增</h3>
+                  <div class="mb-1" v-for="(image, i) in product.imagesUrl" :key="i">
+                    <div class="mb-3">
+                      <label :for="'imagesUrl'+i" class="form-label">圖片網址</label>
+                      <input :id="'imagesUrl'+i" v-model.lazy="product.imagesUrl[i]" type="text" class="form-control"
+                        placeholder="請輸入圖片連結">
+                      <upload :index="i" @change-img="changeImage">
+                        <template #main><div></div></template>
+                      </upload>
+                    </div>
+                    <img class="img-fluid" :src="image">
+                  </div>
+                  <div v-if="!product.imagesUrl?.length || product.imagesUrl[product.imagesUrl.length - 1]">
+                    <button class="btn btn-outline-primary btn-sm d-block w-100" @click="product.imagesUrl.push('')">
+                      新增圖片
+                    </button>
+                  </div>
+                  <div v-else>
+                    <button class="btn btn-outline-danger btn-sm d-block w-100" @click="product.imagesUrl.pop()">
+                      取消新增
+                    </button>
+                  </div>
+                </div>
+                <div class="col-sm-8">
+                  <div class="mb-3">
+                    <label for="title" class="form-label">標題</label>
+                    <input id="title" type="text" class="form-control" placeholder="請輸入標題" v-model="product.title">
+                  </div>
+
+                  <div class="row">
+                    <div class="mb-3 col-md-6">
+                      <label for="category" class="form-label">分類</label>
+                      <input id="category" type="text" class="form-control" placeholder="請輸入分類" v-model="product.category">
+                    </div>
+                    <div class="mb-3 col-md-6">
+                      <label for="price" class="form-label">單位</label>
+                      <input id="unit" type="text" class="form-control" placeholder="請輸入單位" v-model="product.unit">
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="mb-3 col-md-6">
+                      <label for="origin_price" class="form-label">原價</label>
+                      <input id="origin_price" type="number" min="0" class="form-control" min="0" placeholder="請輸入原價" v-model.number="product.origin_price">
+                    </div>
+                    <div class="mb-3 col-md-6">
+                      <label for="price" class="form-label">售價</label>
+                      <input id="price" type="number" min="0" class="form-control" min="0" placeholder="請輸入售價" v-model.number="product.price">
+                    </div>
+                  </div>
+                  <hr>
+
+                  <div class="mb-3">
+                    <label for="description" class="form-label">產品描述</label>
+                    <textarea id="description" type="text" class="form-control"
+                      placeholder="請輸入產品描述" v-model="product.description">
+                    </textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="content" class="form-label">說明內容</label>
+                    <textarea id="content" type="text" class="form-control"
+                      placeholder="請輸入說明內容" v-model="product.content">
+                    </textarea>
+                  </div>
+                  <div class="mb-3">
+                    <div class="form-check">
+                      <input id="is_enabled" class="form-check-input" type="checkbox" :true-value="1" :false-value="0" v-model="product.is_enabled">
+                      <label class="form-check-label" for="is_enabled">是否啟用</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                取消
+              </button>
+              <button type="button" class="btn btn-primary" @click.prevent="updateProduct(page)"
+                :disabled="!product.title || !product.category || !product.unit || !product.origin_price || !product.price">
+                確認
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <!-- 刪除產品 template -->
+    <script type="text/x-template" id="deleteProductModal">
+      <div id="delProductModal" ref="delProductModal" class="modal fade" tabindex="-1" aria-labelledby="delProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content border-0">
+            <div class="modal-header bg-danger text-white">
+              <h5 id="delProductModalLabel" class="modal-title">
+                <span>刪除產品</span>
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              是否刪除
+              <strong class="text-danger"></strong> {{product.title}} (刪除後無法恢復)。
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                取消
+              </button>
+              <button type="button" class="btn btn-danger" @click="deleteProduct(page)">
+                確認刪除
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+      crossorigin="anonymous"></script>
+    <script src="./products.js" type="module"></script>
+  </body>
+
+</html>
