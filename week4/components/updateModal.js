@@ -88,8 +88,7 @@ export default {
       }
     },
   },
-  mounted() {},
   components: {
     upload,
-  },
+  }
 };

@@ -31,6 +31,5 @@ export default {
           alert(err.response.data.message);
         });
     },
-  },
-  mounted() {},
+  }
 };
