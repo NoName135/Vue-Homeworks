@@ -82,8 +82,8 @@
         <pagination :page-obj="pagination" @emit-page="getProducts"></pagination>
       </div>
       <!-- Modal -->
-      <update-product-modal :url="apiUrl" :path="apiPath" :is-new="isNew" :product="tempProduct" :page="pagination.current_page" @update="getProducts"></update-product-modal>
-      <delete-product-modal :url="apiUrl" :path="apiPath" :product="tempProduct" :page="pagination.current_page" @update="getProducts"></delete-product-modal>
+      <update-product-modal :is-new="isNew" :product="tempProduct" :page="pagination.current_page" @hide="hideModal" @update="getProducts"></update-product-modal>
+      <delete-product-modal :product="tempProduct" :page="pagination.current_page" @hide="hideModal" @update="getProducts"></delete-product-modal>
       <!-- Modal -->
     </div>
 
