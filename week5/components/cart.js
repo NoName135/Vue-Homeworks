@@ -43,7 +43,7 @@ export default {
             </div>
           </td>
           <td class="text-end">
-            <small class="text-success" v-if="item.coupon">折扣價：</small>
+            <small class="text-success" v-if="cart.total > cart.final_total">折扣價：</small>
             {{ item.final_total }}
           </td>
         </tr>

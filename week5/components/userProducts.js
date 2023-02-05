@@ -28,8 +28,9 @@ export default {
           {{ product.title }}
         </td>
         <td>
-          <del class="h6">原價 {{ product.origin_price }} 元</del>
-          <div class="h5">現在只要 {{ product.price }} 元</div>
+          <div class="h5" v-if="!product.price">{{ product.origin_price }} 元</div>
+          <del class="h6" v-if="product.price">原價 {{ product.origin_price }} 元</del>
+          <div class="h5" v-if="product.price">現在只要 {{ product.price }} 元</div>
         </td>
         <td>
           <div class="btn-group btn-group-sm">
