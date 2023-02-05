@@ -66,6 +66,7 @@ export default {
     </v-form>`,
   methods: {
     ...mapActions(cartStore, ['getCart']),
+    // 驗證手機號碼格式
     isPhone(value) {
       const phoneNumber = /^(09)[0-9]{8}$/
       return phoneNumber.test(value) ? true : '電話須為手機號碼格式'
