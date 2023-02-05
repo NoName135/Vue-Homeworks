@@ -17,6 +17,7 @@ loadLocaleFromURL(
 );
 configure({
   generateMessage: localize('zh_TW'),
+  // validateOnInput: true // 輸入文字時就進行驗證
 });
 
 export default {
