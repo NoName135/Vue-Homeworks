@@ -43,7 +43,7 @@ export default {
       <div class="mb-3">
         <label for="tel" class="form-label">收件人電話</label>
         <v-field id="tel" name="電話" type="text" placeholder="請輸入電話"
-          :class="['form-control', { 'is-invalid': errors['電話'] }]" rules="required|min:8|max:10">
+          :class="['form-control', { 'is-invalid': errors['電話'] }]" :rules="isPhone">
         </v-field>
         <error-message name="電話" class="invalid-feedback"></error-message>
       </div>
@@ -66,6 +66,10 @@ export default {
     </v-form>`,
   methods: {
     ...mapActions(cartStore, ['getCart']),
+    isPhone(value) {
+      const phoneNumber = /^(09)[0-9]{8}$/
+      return phoneNumber.test(value) ? true : '電話須為手機號碼格式'
+    },
     createOrder(values) {
       // console.log(values);
       const url = `${apiUrl}/api/${apiPath}/order`;
