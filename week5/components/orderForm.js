@@ -11,6 +11,15 @@ defineRule('required', required);
 defineRule('email', email);
 defineRule('min', min);
 defineRule('max', max);
+defineRule('phone', value => {
+  const phoneNumber = /^(09)[0-9]{8}$/
+  if (phoneNumber.test(value)) {
+    return true;
+  } else {
+    return '電話須為手機號碼格式';
+  }
+});
+
 
 loadLocaleFromURL(
   'https://unpkg.com/@vee-validate/i18n@4.1.0/dist/locale/zh_TW.json'
@@ -43,7 +52,7 @@ export default {
       <div class="mb-3">
         <label for="tel" class="form-label">收件人電話</label>
         <v-field id="tel" name="電話" type="text" placeholder="請輸入電話"
-          :class="['form-control', { 'is-invalid': errors['電話'] }]" :rules="isPhone">
+          :class="['form-control', { 'is-invalid': errors['電話'] }]" rules="required|phone">
         </v-field>
         <error-message name="電話" class="invalid-feedback"></error-message>
       </div>
@@ -66,11 +75,6 @@ export default {
     </v-form>`,
   methods: {
     ...mapActions(cartStore, ['getCart']),
-    // 驗證手機號碼格式
-    isPhone(value) {
-      const phoneNumber = /^(09)[0-9]{8}$/
-      return phoneNumber.test(value) ? true : '電話須為手機號碼格式'
-    },
     createOrder(values) {
       // console.log(values);
       const url = `${apiUrl}/api/${apiPath}/order`;
