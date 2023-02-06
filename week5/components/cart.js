@@ -37,7 +37,7 @@ export default {
               <div class="input-group input-group-sm">
                 <div class="input-group mb-3">
                   <input min="1" type="number" class="form-control" :disabled="item.id === loadings.loadingCartId"
-                    v-model.number="item.qty" @blur="updateCart(item.id, item.qty)">
+                    :value="item.qty" @blur="(e) => updateCart(item, e.target.value)">
                   <span class="input-group-text" id="basic-addon2">{{ item.product.unit }}</span>
                 </div>
               </div>

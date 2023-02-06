@@ -70,15 +70,18 @@ export default defineStore('cartItems', {
           alert(err.response.data.message);
         });
     },
-    updateCart(id, qty) {
+    updateCart(data, qty) {
       const { loadings } = loadingStore();
-      const url = `${apiUrl}/api/${apiPath}/cart/${id}`;
-      loadings.loadingCartId = id;
+      const url = `${apiUrl}/api/${apiPath}/cart/${data.id}`;
+      loadings.loadingCartId = data.id;
+
+      const cartItem = this.cart.carts.find((item) => item.id === data.id);
+      cartItem.qty = qty * 1;
       axios
         .put(url, {
           data: {
-            product_id: id,
-            qty: qty,
+            product_id: data.product_id,
+            qty: cartItem.qty,
           },
         })
         .then((res) => {
