@@ -1,5 +1,6 @@
 import { apiUrl, apiPath } from '../../src/api.js';
 import loadingStore from './loadingStore.js';
+import modalStore from './modalStore.js';
 
 const { defineStore } = Pinia;
 
@@ -24,6 +25,8 @@ export default defineStore('cartItems', {
     },
     addToCart(id, qty = 1) {
       const { loadings } = loadingStore();
+      const { hideModal } = modalStore();
+
       const url = `${apiUrl}/api/${apiPath}/cart`;
       loadings.loadingId = id;
       loadings.loadingBtn = 'addToCart';
@@ -39,6 +42,7 @@ export default defineStore('cartItems', {
           loadings.loadingId = '';
           loadings.loadingBtn = '';
           this.getCart();
+          hideModal();
           alert('已加入購物車');
         })
         .catch((err) => {

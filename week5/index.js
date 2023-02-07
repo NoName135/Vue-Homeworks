@@ -3,26 +3,29 @@ import userProductModal from './components/userProductModal.js'
 import cart from './components/cart.js'
 import orderForm from './components/orderForm.js';
 
-const { createPinia } = Pinia;
+import userProductsStore from './pinia/userProductsStore.js';
+import modalStore from './pinia/modalStore.js';
+
+const { createPinia, mapActions, mapState } = Pinia;
+
 const app = Vue.createApp({
-  data() {
-    return {
-      tempProduct: {},
-    };
+  mounted() {
+    // 3. 初始化時先將 Modal DOM 存到 store
+    const modal = this.$refs.userProductModal;
+    this.createUserProductModalRef(modal);
   },
   methods: {
-    openProductModal() {
-      this.$refs.userProductModal.openModal();
-    },
-    changeProduct(product) {
-      this.tempProduct = product;
-    },
+    // 2. 引入 store DOM 的函式
+    ...mapActions(modalStore, ['createUserProductModalRef']),
+  },
+  computed: {
+    ...mapState(userProductsStore, ['isLoading'])
   }
 });
 
 const pinia = createPinia();
 app.use(pinia);
-
+app.component('loading', VueLoading.Component);
 app.component('userProducts', userProducts)
 app.component('userProductModal', userProductModal);
 app.component('cart', cart);

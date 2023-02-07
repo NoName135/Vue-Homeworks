@@ -51,7 +51,7 @@ export default {
 
       <div class="mb-3">
         <label for="tel" class="form-label">收件人電話</label>
-        <v-field id="tel" name="電話" type="text" placeholder="請輸入電話"
+        <v-field id="tel" name="電話" type="tel" placeholder="請輸入電話"
           :class="['form-control', { 'is-invalid': errors['電話'] }]" rules="required|phone">
         </v-field>
         <error-message name="電話" class="invalid-feedback"></error-message>

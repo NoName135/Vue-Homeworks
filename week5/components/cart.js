@@ -6,7 +6,7 @@ const { mapActions, mapState } = Pinia;
 export default {
   template: `
     <div class="text-end">
-      <button class="btn btn-outline-danger" type="button" @click="deleteCart()">清空購物車</button>
+      <button class="btn btn-outline-danger" type="button" :disabled="!cart.carts?.length" @click="deleteCart()">清空購物車</button>
     </div>
     <table class="table align-middle">
       <thead>
@@ -14,7 +14,8 @@ export default {
           <th></th>
           <th>品名</th>
           <th style="width: 150px">數量/單位</th>
-          <th>單價</th>
+          <th class="ps-5">單價</th>
+          <th>小計</th>
         </tr>
       </thead>
       <tbody>
@@ -35,12 +36,15 @@ export default {
             </td>
             <td>
               <div class="input-group input-group-sm">
-                <div class="input-group mb-3">
+                <div class="input-group">
                   <input min="1" type="number" class="form-control" :disabled="item.id === loadings.loadingCartId"
                     :value="item.qty" @blur="(e) => updateCart(item, e.target.value)">
                   <span class="input-group-text" id="basic-addon2">{{ item.product.unit }}</span>
                 </div>
               </div>
+            </td>
+            <td class="ps-5">
+              {{ item.product.price }}
             </td>
             <td class="text-end">
               <small class="text-success" v-if="cart.total > cart.final_total">折扣價：</small>
@@ -51,7 +55,7 @@ export default {
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="3" class="text-end">總計</td>
+          <td colspan="4" class="text-end">總計</td>
           <td class="text-end">{{ cart.total }}</td>
         </tr>
         <tr v-if="cart.total > cart.final_total">

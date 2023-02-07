@@ -1,8 +1,8 @@
-import { apiUrl, apiPath } from '../../src/api.js';
 import userPagination from './userPagination.js';
 import loadingStore from '../pinia/loadingStore.js';
 import userProductsStore from '../pinia/userProductsStore.js';
 import cartStore from '../pinia/cartStore.js'
+import modalStore from '../pinia/modalStore.js';
 
 const { mapActions, mapState } = Pinia;
 
@@ -35,7 +35,7 @@ export default {
           <td>
             <div class="btn-group btn-group-sm">
               <button type="button" class="btn btn-outline-secondary"
-                :disabled="loadings.loadingId === product.id" @click="getProduct(product.id)">
+                :disabled="loadings.loadingId === product.id" @click="openModal(product)">
                 <i class="fas fa-spinner fa-pulse"
                   v-if="loadings.loadingBtn === 'productDetail' && loadings.loadingId === product.id">
                 </i>
@@ -54,12 +54,6 @@ export default {
     </table>
     <!-- 頁碼 -->
     <user-pagination :page-obj="pagination" @emit-page="getProducts"></user-pagination>`,
-  emits: ['product', 'openModal'],
-  data() {
-    return {
-      tempProduct: {},
-    };
-  },
   methods: {
     ...mapActions(userProductsStore, [
       'getProducts',
@@ -67,30 +61,11 @@ export default {
       'addToCart',
     ]),
     ...mapActions(cartStore, ['addToCart']),
-    getProduct(id) {
-      const url = `${apiUrl}/api/${apiPath}/product/${id}`;
-      this.loadings.loadingId = id;
-      this.loadings.loadingBtn = 'productDetail';
-      axios
-        .get(url)
-        .then((res) => {
-          // console.log(res.data);
-          this.loadings.loadingId = '';
-          this.loadings.loadingBtn = '';
-          this.tempProduct = res.data.product;
-          this.$emit('product', this.tempProduct);
-          this.$emit('openModal');
-        })
-        .catch((err) => {
-          this.loadings.loadingId = '';
-          this.loadings.loadingBtn = '';
-          alert(err.response.data.message);
-        });
-    },
+    ...mapActions(modalStore, ['openModal']),
   },
   computed: {
     ...mapState(loadingStore, ['loadings']),
-    ...mapState(userProductsStore, ['products', 'pagination']),
+    ...mapState(userProductsStore, ['products', 'tempProduct', 'pagination']),
   },
   mounted() {
     this.getProducts();

@@ -13,6 +13,7 @@
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css'
     integrity='sha512-q3eWabyZPc1XTCmF+8/LuE1ozpg5xxn7iO89yfSOd5/oKvyqLngoNGsx8jq92Y8eXJ/IRxQbEC+FGSYxtk2oiw=='
     crossorigin='anonymous' />
+  <link href="https://cdn.jsdelivr.net/npm/vue-loading-overlay@6.0.2/dist/css/index.min.css" rel="stylesheet">
   <style>
     productImg {
       height: 100px;
@@ -24,12 +25,13 @@
 
 <body>
   <div id="app">
+    <loading :active="isLoading"></loading>
     <div class="container">
       <div class="mt-4">
         <!-- 產品Modal -->
-        <user-product-modal :product="tempProduct" ref="userProductModal"></user-product-modal>
+        <user-product-modal ref="userProductModal"></user-product-modal>
         <!-- 產品列表 -->
-        <user-products @product="changeProduct" @open-modal="openProductModal"></user-products>
+        <user-products></user-products>
         <!-- 購物車列表 -->
         <cart></cart>
       </div>
@@ -48,7 +50,7 @@
         <div class="modal-content border-0">
           <div class="modal-header bg-dark text-white">
             <h5 class="modal-title" id="exampleModalLabel">
-              <span>{{ product.title }}</span>
+              <span>{{ tempProduct.title }}</span>
             </h5>
             <button type="button" class="btn-close bg-white"
               data-bs-dismiss="modal" aria-label="Close"></button>
@@ -56,19 +58,19 @@
           <div class="modal-body">
             <div class="row">
               <div class="col-sm-6">
-                <img class="img-fluid" :src="product.imageUrl" alt="">
+                <img class="img-fluid" :src="tempProduct.imageUrl" alt="">
               </div>
               <div class="col-sm-6">
-                <span class="badge bg-primary rounded-pill">{{ product.category }}</span>
-                <p>商品描述：{{ product.description }}</p>
-                <p>商品內容：{{ product.content }}</p>
-                <div class="h5" v-if="!product.price">{{ product.origin_price }} 元</div>
-                <del class="h6" v-if="product.price">原價 {{ product.origin_price }} 元</del>
-                <div class="h5" v-if="product.price">現在只要 {{ product.price }} 元</div>
+                <span class="badge bg-primary rounded-pill">{{ tempProduct.category }}</span>
+                <p>商品描述：{{ tempProduct.description }}</p>
+                <p>商品內容：{{ tempProduct.content }}</p>
+                <div class="h5" v-if="!tempProduct.price">{{ tempProduct.origin_price }} 元</div>
+                <del class="h6" v-if="tempProduct.price">原價 {{ tempProduct.origin_price }} 元</del>
+                <div class="h5" v-if="tempProduct.price">現在只要 {{ tempProduct.price }} 元</div>
                 <div>
                   <div class="input-group">
                     <input type="number" class="form-control" min="1" v-model.number="qty">
-                    <button type="button" class="btn btn-primary" @click="() => {addToCart(product.id, qty), hideModal()}">加入購物車</button>
+                    <button type="button" class="btn btn-primary" @click="addToCart(tempProduct.id, qty)">加入購物車</button>
                   </div>
                 </div>
               </div>
@@ -86,6 +88,8 @@
     crossorigin="anonymous"></script>
 
   <script src="https://unpkg.com/vue@next"></script>
+  <!-- loading-overlay -->
+  <script src="https://cdn.jsdelivr.net/npm/vue-loading-overlay@6.0.2/dist/index.min.js"></script>
   <!-- vee-validate -->
   <script src="https://unpkg.com/vee-validate@next"></script>
   <script src="https://unpkg.com/@vee-validate/i18n@4.1.0"></script>
