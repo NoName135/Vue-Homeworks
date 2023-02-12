@@ -1,4 +1,5 @@
 <template>
+  <h4 class="text-center">這裡是 前台 購物車</h4>
   <div class="text-end">
     <button class="btn btn-outline-danger" type="button" :disabled="!cart.carts?.length" @click="deleteCart()">清空購物車</button>
   </div>

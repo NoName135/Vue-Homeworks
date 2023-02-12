@@ -7,7 +7,9 @@
       <router-link to="/admin/orders">後台訂單</router-link> |
       <a href="#" @click.prevent="logOut">登出</a>
     </div>
-    <router-view v-if="checkLogin"></router-view>
+    <div class="container">
+      <router-view v-if="checkLogin"></router-view>
+    </div>
   </div>
 </template>
 

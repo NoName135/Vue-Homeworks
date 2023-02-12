@@ -1,4 +1,5 @@
 <template>
+  <h4 class="text-center">這裡是 前台 產品列表</h4>
   <table class="table align-middle">
       <thead>
         <tr>
