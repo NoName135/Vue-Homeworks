@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export default defineStore('modalStore', {
+export default defineStore("userModalStore", {
   state: () => {
     return {
       userProductModal: {},

@@ -62,10 +62,9 @@ import { mapActions, mapState } from "pinia"
 export default {
   methods: {
     // 2. 引入 store DOM 的函式
-    ...mapActions(modalStore, ['createUserProductModalRef']),
+    ...mapActions(modalStore, ['createUserProductModalRef', 'openModal']),
     ...mapActions(productsStore, [ 'getProducts', 'getProduct', 'addToCart' ]),
-    ...mapActions(cartStore, ['addToCart']),
-    ...mapActions(modalStore, ['openModal']),
+    ...mapActions(cartStore, ['addToCart'])
   },
   computed: {
     ...mapState(loadingStore, ['loadings']),
