@@ -20,7 +20,7 @@ export default {
       </thead>
       <tbody>
         <template v-if="cart.carts">
-          <tr v-for="item in cart.carts">
+          <tr v-for="item in cart.carts" :key="item.id">
             <td>
               <button type="button" class="btn btn-outline-danger btn-sm" :disabled="item.id === loadings.loadingCartId"
                 @click="deleteCart(item.id)">

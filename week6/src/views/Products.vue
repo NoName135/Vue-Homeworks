@@ -1,14 +1,5 @@
-import userPagination from './userPagination.js';
-import loadingStore from '../pinia/loadingStore.js';
-import userProductsStore from '../pinia/userProductsStore.js';
-import cartStore from '../pinia/cartStore.js'
-import modalStore from '../pinia/modalStore.js';
-
-const { mapActions, mapState } = Pinia;
-
-export default {
-  template: `
-    <table class="table align-middle">
+<template>
+  <table class="table align-middle">
       <thead>
         <tr>
           <th>圖片</th>
@@ -36,15 +27,13 @@ export default {
             <div class="btn-group btn-group-sm">
               <button type="button" class="btn btn-outline-secondary"
                 :disabled="loadings.loadingId === product.id" @click="openModal(product)">
-                <i class="fas fa-spinner fa-pulse"
-                  v-if="loadings.loadingBtn === 'productDetail' && loadings.loadingId === product.id">
-                </i>
                 查看更多
               </button>
               <button type="button" class="btn btn-outline-danger"
                 :disabled="loadings.loadingId === product.id" @click="addToCart(product.id)">
-                <i class="fas fa-spinner fa-pulse"
-                  v-if="loadings.loadingBtn === 'addToCart' && loadings.loadingId === product.id"></i>
+                <font-awesome-icon :icon="['fas', 'spinner']" spin
+                  v-if="loadings.loadingId === product.id">
+                </font-awesome-icon>
                 加到購物車
               </button>
             </div>
@@ -53,24 +42,44 @@ export default {
       </tbody>
     </table>
     <!-- 頁碼 -->
-    <user-pagination :page-obj="pagination" @emit-page="getProducts"></user-pagination>`,
+    <pagination :page-obj="pagination" @emit-page="getProducts"></pagination>
+    <!-- Modal -->
+    <user-product-modal ref="userProductModal"></user-product-modal>
+</template>
+
+<script>
+import userProductModal from "../components/UserProductModal.vue";
+import pagination from '../components/Pagination.vue';
+
+import loadingStore from '../stores/loadingStore.js';
+import productsStore from '../stores/productsStore.js'
+import modalStore from '../stores/modalStore.js';
+import cartStore from '../stores/cartStore';
+
+import { mapActions, mapState } from "pinia"
+
+export default {
   methods: {
-    ...mapActions(userProductsStore, [
-      'getProducts',
-      'getProduct',
-      'addToCart',
-    ]),
+    // 2. 引入 store DOM 的函式
+    ...mapActions(modalStore, ['createUserProductModalRef']),
+    ...mapActions(productsStore, [ 'getProducts', 'getProduct', 'addToCart' ]),
     ...mapActions(cartStore, ['addToCart']),
     ...mapActions(modalStore, ['openModal']),
   },
   computed: {
     ...mapState(loadingStore, ['loadings']),
-    ...mapState(userProductsStore, ['products', 'tempProduct', 'pagination']),
+    ...mapState(productsStore, ['products', 'pagination']),
   },
   mounted() {
+    // 3. 初始化時先將 Modal DOM 存到 store
+    const productModal = this.$refs.userProductModal;
+    this.createUserProductModalRef(productModal);
+    // 渲染 products
     this.getProducts();
   },
   components: {
-    userPagination,
+    userProductModal,
+    pagination
   },
-};
+}
+</script>
