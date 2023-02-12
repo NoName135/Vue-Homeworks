@@ -93,13 +93,12 @@ export default {
     },
     changePaid(id){
       const orderItem = this.orders.find(item => item.id === id)
+      orderItem.is_paid = !orderItem.is_paid;
 
       this.loadings.isLoading = true;
       this.$http
         .put(`${VITE_API}/api/${VITE_PATH}/admin/order/${id}`, {
-          data: {
-            is_paid: !orderItem.is_paid
-          }
+          data: { ...orderItem }
         })
           .then((res) => {
             // console.log(res.data)
