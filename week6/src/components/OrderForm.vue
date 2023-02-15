@@ -18,7 +18,7 @@
     </div>
 
     <div class="mb-3">
-      <label for="tel" class="form-label">收件人電話</label>
+      <label for="tel" class="form-label">收件人電話 (09XXXXXXXX)</label>
       <V-field id="tel" name="電話" type="tel" placeholder="請輸入電話"
         :class="['form-control', { 'is-invalid': errors['電話'] }]" rules="required|phone">
       </V-field>

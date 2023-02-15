@@ -70,6 +70,7 @@
 import { mapActions, mapState } from "pinia";
 import loadingStore from '../stores/loadingStore.js';
 import cartStore from '../stores/cartStore.js';
+import OrderForm from "../components/OrderForm.vue"
 
 export default {
   methods: {
@@ -82,5 +83,8 @@ export default {
   mounted() {
     this.getCart();
   },
+  components: {
+    OrderForm
+  }
 }
 </script>

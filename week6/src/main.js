@@ -42,7 +42,6 @@ configure({
 });
 setLocale('zh_TW'); // 設定預設語系
 
-import OrderForm from "./components/OrderForm.vue"
 createApp(App)
   .use(createPinia())
   .use(router)
@@ -52,5 +51,4 @@ createApp(App)
   .component("VForm", Form)
   .component("VField", Field)
   .component("ErrorMessage", ErrorMessage)
-  .component("OrderForm", OrderForm)
   .mount("#app");

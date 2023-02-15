@@ -19,13 +19,14 @@ const { VITE_API } = import.meta.env;
 export default {
   data() {
     return {
-      checkLogin: false
-    }
+      checkLogin: false,
+    };
   },
   methods: {
     userCheck() {
       const token = document.cookie.replace(
-        /(?:(?:^|.*;\s*)loginToken\s*=\s*([^;]*).*$)|^.*$/, "$1"
+        /(?:(?:^|.*;\s*)loginToken\s*=\s*([^;]*).*$)|^.*$/,
+        "$1"
       );
       if (token) {
         this.$http.defaults.headers.common.Authorization = `${token}`;
@@ -36,11 +37,15 @@ export default {
             this.checkLogin = true;
           })
           .catch((err) => {
-            alert(err.response.data.message);
+            if (err.response.status == 401) {
+              alert("登入權限過期，請重新登入");
+            } else {
+              alert(err.response.data.message);
+            }
             this.$router.push("/login");
           });
       } else {
-        alert("您尚未登入。");
+        alert("您尚未登入");
         this.$router.push("/login");
       }
     },
@@ -51,6 +56,6 @@ export default {
   },
   mounted() {
     this.userCheck();
-  }
-}
+  },
+};
 </script>
