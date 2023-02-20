@@ -8,6 +8,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+const { VITE_API, VITE_PATH} = import.meta.env;
+
 export default {
   props: ['index'],
   emits: ['changeImg'],
